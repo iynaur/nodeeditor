@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nodes/NodeData.h>
+#include <nodes/NodeData>
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
@@ -10,9 +10,6 @@ struct TypeParseTraits
 {
     static const char* name(){return typeid(T).name();}
 };
-
-#define REGISTER_PARSE_TYPE(X) template <> struct TypeParseTraits<X> \
-{ static const char* name(){return #X;} };
 
 template <typename T>
 class MyData : public NodeData
@@ -27,7 +24,7 @@ public:
     NodeDataType
     type() const override
     {
-        return {TypeParseTraits<T>::name(), TypeParseTraits<T>::name()};
+        return {typeid(T).name(), TypeParseTraits<T>::name()};
     }
 
     T data() const {return m_value;}
@@ -35,7 +32,13 @@ public:
     T m_value;
 };
 
-#define REGISTER_DATA_TYPE(X, XData) REGISTER_PARSE_TYPE(X); typedef MyData<X> XData;
+#define REGISTER_TYPE_NAME(T, NAME) \
+    template <> struct TypeParseTraits<T> \
+    { static const char* name(){return #NAME;} };
+
+#define REGISTER_NODEDATA(XData, X, NAME) \
+    REGISTER_TYPE_NAME(X, NAME); \
+    typedef MyData<X> XData;
 
 
 

@@ -9,8 +9,8 @@ namespace QtNodes
 
 struct NodeDataType
 {
-  QString id;
-  QString name;
+  QString id; //unique for internal use.
+  QString name; //readable name for show
 };
 
 /// Class represents data transferred between nodes.

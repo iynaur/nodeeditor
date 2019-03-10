@@ -3,7 +3,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
-#include <nodes/NodeDataModel.h>
+#include <nodes/NodeDataModel>
 #include "templateData.h"
 
 using QtNodes::NodeData;

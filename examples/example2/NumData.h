@@ -1,7 +1,7 @@
 #pragma once
 
 //#include <nodes/NodeData.h>
-#include <nodes/NodeDataModel.h>
+#include <nodes/NodeDataModel>
 #include "templateData.h"
 
 using QtNodes::PortType;

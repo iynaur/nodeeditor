@@ -61,7 +61,7 @@ public:
 
     if (textData)
     {
-      _label->setText(textData->text());
+      _label->setText(textData->data());
     }
     else
     {
