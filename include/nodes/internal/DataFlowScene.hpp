@@ -135,9 +135,6 @@ signals:
 
 private:
 
-  // default model class
-  class DataFlowModel;
-
   DataFlowModel* _dataFlowModel;
 
 };

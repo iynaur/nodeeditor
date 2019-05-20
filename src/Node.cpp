@@ -17,6 +17,9 @@
 using QtNodes::Node;
 using QtNodes::NodeDataModel;
 using QtNodes::Connection;
+using QtNodes::PortType;
+using QtNodes::PortIndex;
+using QtNodes::NodeData;
 
 Node::
 Node(std::unique_ptr<NodeDataModel> && dataModel, QUuid const& id)

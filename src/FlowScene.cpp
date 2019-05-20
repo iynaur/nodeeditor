@@ -2,12 +2,15 @@
 #include "NodeIndex.hpp"
 #include "ConnectionGraphicsObject.hpp"
 #include "NodeGraphicsObject.hpp"
+#include "FlowSceneModel.hpp"
 
 #include <algorithm>
 
 using QtNodes::FlowScene;
 using QtNodes::NodeGraphicsObject;
 using QtNodes::NodeIndex;
+using QtNodes::FlowSceneModel;
+using QtNodes::PortIndex;
 
 FlowScene::
 FlowScene(FlowSceneModel* model,
@@ -126,6 +129,7 @@ nodeRemoved(const QUuid& id)
   // just delete it
   delete ngo;
   auto erased = _nodeGraphicsObjects.erase(id);
+  Q_UNUSED(erased);
   Q_ASSERT(erased == 1);
 }
 
@@ -176,6 +180,7 @@ nodePortUpdated(NodeIndex const& id)
         // remove the ConnectionGraphicsObject
         delete conn;
         auto erased = _connGraphicsObjects.erase(conn->id());
+        Q_UNUSED(erased);
         Q_ASSERT(erased == 1);
       }
     }
@@ -186,6 +191,7 @@ nodePortUpdated(NodeIndex const& id)
   // just delete it
   delete thisNodeNGO;
   auto erased = _nodeGraphicsObjects.erase(id.id());
+  Q_UNUSED(erased);
   Q_ASSERT(erased == 1);
 
   // create it

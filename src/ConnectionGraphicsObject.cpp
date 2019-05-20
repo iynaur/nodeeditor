@@ -24,6 +24,9 @@ using QtNodes::Connection;
 using QtNodes::ConnectionID;
 using QtNodes::FlowScene;
 using QtNodes::NodeDataType;
+using QtNodes::NodeIndex;
+using QtNodes::PortIndex;
+using QtNodes::PortType;
 
 ConnectionGraphicsObject::
 ConnectionGraphicsObject(NodeIndex const& leftNode,
@@ -31,14 +34,14 @@ ConnectionGraphicsObject(NodeIndex const& leftNode,
                          NodeIndex const& rightNode,
                          PortIndex rightPortIndex,
                          FlowScene&       scene)
-  : _state(leftNode.isValid() ?
+  : _scene{scene}
+  , _state(leftNode.isValid() ?
            (rightNode.isValid() ?  PortType::None : PortType::In) :
            PortType::Out)
   , _leftNode{leftNode}
   , _rightNode{rightNode}
   , _leftPortIndex{leftPortIndex}
   , _rightPortIndex{rightPortIndex}
-  , _scene{scene}
 {
   _scene.addItem(this);
 
@@ -254,8 +257,8 @@ mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     {
       Q_ASSERT(this == _scene._temporaryConn);
       // remove this from the scene
-      delete _scene._temporaryConn;
       _scene._temporaryConn = nullptr;
+      deleteLater();
     }
 
     return;
@@ -272,16 +275,14 @@ mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
   {
     node->resetReactionToConnection();
     Q_ASSERT(this == _scene._temporaryConn);
-
-    delete _scene._temporaryConn;
     _scene._temporaryConn = nullptr;
+    deleteLater();
   }
   else if (state().requiresPort())
   {
     Q_ASSERT(this == _scene._temporaryConn);
-
-    delete _scene._temporaryConn;
     _scene._temporaryConn = nullptr;
+    deleteLater();
   }
 }
 
