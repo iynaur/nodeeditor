@@ -18,6 +18,7 @@ class Connection;
 class DataModelRegistry;
 class NodeDataModel;
 class Node;
+class DataFlowModel;
 
 /// A FlowScene that uses a simple data flow model.
 /// This class is a drop-in replacement for the old FlowScene
