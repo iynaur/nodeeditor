@@ -17,6 +17,8 @@ set(NE_DEVELOPER_DEFAULTS "${is_root_project}" CACHE BOOL "Turns on default sett
 
 option(BUILD_TESTING "Build tests" "${NE_DEVELOPER_DEFAULTS}")
 option(BUILD_EXAMPLES "Build Examples" "${NE_DEVELOPER_DEFAULTS}")
+option(BUILD_SHARED_LIBS "Build as shared library" ON)
+option(BUILD_DEBUG_POSTFIX_D "Append d suffix to debug libraries" OFF)
 option(NE_FORCE_TEST_COLOR "Force colorized unit test output" OFF)
 
 enable_testing()
@@ -30,10 +32,14 @@ if(NE_DEVELOPER_DEFAULTS)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 endif()
 
+if(BUILD_DEBUG_POSTFIX_D)
+  set(CMAKE_DEBUG_POSTFIX d)
+endif()
+
 add_subdirectory(external)
 
 # Find the QtWidgets library
-find_package(Qt5 COMPONENTS
+find_package(Qt5 5.3 COMPONENTS
              Core
              Widgets
              Gui
@@ -70,9 +76,8 @@ set(CPP_SOURCE_FILES
 )
 
 # If we want to give the option to build a static library,
-# leave off SHARED here and use BUILD_SHARED_LIBS to
-# choose whether to add -D NODE_EDITOR_SHARED
-add_library(nodes SHARED
+# set BUILD_SHARED_LIBS option to OFF
+add_library(nodes
   ${CPP_SOURCE_FILES}
   ${RESOURCES}
 )
@@ -102,6 +107,7 @@ target_compile_definitions(nodes
   PRIVATE
     NODE_EDITOR_EXPORTS
     #NODE_DEBUG_DRAWING
+    QT_NO_KEYWORDS
 )
 
 target_compile_options(nodes

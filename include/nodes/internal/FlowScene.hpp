@@ -52,7 +52,7 @@ public:
                    PortIndex portIndexOut,
                    TypeConverter const & converter = TypeConverter{});
 
-  std::shared_ptr<Connection>restoreConnection(QJsonObject const &connectionJson);
+  std::shared_ptr<Connection> restoreConnection(QJsonObject const &connectionJson);
 
   void deleteConnection(Connection& connection);
 
@@ -72,18 +72,21 @@ public:
 
   void iterateOverNodeDataDependentOrder(std::function<void(NodeDataModel*)> const & visitor);
 
-  QPointF getNodePosition(const Node& node) const;
+  QPointF getNodePosition(Node const& node) const;
 
-  void setNodePosition(Node& node, const QPointF& pos) const;
+  void setNodePosition(Node& node, QPointF const& pos) const;
 
-  QSizeF getNodeSize(const Node& node) const;
+  QSizeF getNodeSize(Node const& node) const;
+
 public:
 
-  std::unordered_map<QUuid, std::unique_ptr<Node> > const &nodes() const;
+  std::unordered_map<QUuid, std::unique_ptr<Node> > const & nodes() const;
 
-  std::unordered_map<QUuid, std::shared_ptr<Connection> > const &connections() const;
+  std::unordered_map<QUuid, std::shared_ptr<Connection> > const & connections() const;
 
-  std::vector<Node*>selectedNodes() const;
+  std::vector<Node*> allNodes() const;
+
+  std::vector<Node*> selectedNodes() const;
 
 public:
 
@@ -97,14 +100,25 @@ public:
 
   void loadFromMemory(const QByteArray& data);
 
-signals:
+Q_SIGNALS:
 
+  /**
+   * @brief Node has been created but not on the scene yet.
+   * @see nodePlaced()
+   */
   void nodeCreated(Node &n);
+
+  /**
+   * @brief Node has been added to the scene.
+   * @details Connect to this signal if need a correct position of node.
+   * @see nodeCreated()
+   */
+  void nodePlaced(Node &n);
 
   void nodeDeleted(Node &n);
 
-  void connectionCreated(Connection &c);
-  void connectionDeleted(Connection &c);
+  void connectionCreated(Connection const &c);
+  void connectionDeleted(Connection const &c);
 
   void nodeMoved(Node& n, const QPointF& newLocation);
 
@@ -128,6 +142,14 @@ private:
   std::unordered_map<QUuid, SharedConnection> _connections;
   std::unordered_map<QUuid, UniqueNode>       _nodes;
   std::shared_ptr<DataModelRegistry>          _registry;
+
+private Q_SLOTS:
+
+  void setupConnectionSignals(Connection const& c);
+
+  void sendConnectionCreatedToNodes(Connection const& c);
+  void sendConnectionDeletedToNodes(Connection const& c);
+
 };
 
 Node*

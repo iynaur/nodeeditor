@@ -59,10 +59,10 @@ public:
   setHovered(unsigned int h) { _hovered = h; }
 
   unsigned int
-  nSources() const { return _nSources; }
+  nSources() const;
 
   unsigned int
-  nSinks() const { return _nSinks; }
+  nSinks() const;
 
   QPointF const&
   draggingPos() const
@@ -105,6 +105,10 @@ public:
   /// Returns the position of a widget on the Node surface
   QPointF
   widgetPosition() const;
+
+  /// Returns the maximum height a widget can be without causing the node to grow.
+  int
+  equivalentWidgetHeight() const;
 
   unsigned int
   validationHeight() const;
